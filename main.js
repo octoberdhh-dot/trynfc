@@ -87,46 +87,65 @@ function renderGallery() {
     });
 }
 
-let slides = [
-    {
-        title: "السلايد الأول",
-        text: "وصف السلايد الأول",
-        image: "",
-        bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-    }
-];
-
+// تعريف المتغيرات العامة
+let slides = [];
 let currentSlide = 0;
 let currentPage = 'slider';
 
-// تحميل البيانات من localStorage
+// تحميل البيانات المحفوظة
 function loadSlides() {
-    const saved = localStorage.getItem('customSlider');
-    if (saved) {
-        slides = JSON.parse(saved);
-        console.log('✅ تم تحميل البيانات المحفوظة');
+    const savedSlides = localStorage.getItem('sliderData');
+    if (savedSlides) {
+        slides = JSON.parse(savedSlides);
+    } else {
+        // البيانات الافتراضية إذا لم يكن هناك بيانات محفوظة
+        slides = [{
+            title: "السلايد الأول",
+            text: "أضف وصفاً هنا",
+            image: "",
+            bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        }];
+        // حفظ البيانات الافتراضية
+        localStorage.setItem('sliderData', JSON.stringify(slides));
     }
+    renderSlides();
 }
 
-// عرض صفحة محددة
-function showPage(pageName) {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
+// حفظ التغييرات
+function saveChanges() {
+    // تحديث البيانات من النموذج
+    slides = slides.map((slide, index) => ({
+        title: document.getElementById(`title${index}`).value,
+        text: document.getElementById(`text${index}`).value,
+        image: document.getElementById(`preview${index}`).src || '',
+        bg: slide.bg
+    }));
 
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
+    // حفظ في localStorage
+    localStorage.setItem('sliderData', JSON.stringify(slides));
+    
+    // عرض رسالة النجاح
+    const msg = document.getElementById('successMessage');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 3000);
+    
+    renderSlides();
+}
 
-    document.getElementById(pageName + 'Page').classList.add('active');
-    document.querySelector(`[onclick="showPage('${pageName}')"]`).classList.add('active');
-
-    currentPage = pageName;
-
-    if (pageName === 'slider') {
-        renderSlides();
-    } else if (pageName === 'edit') {
-        renderEditPanel();
+// معالجة رفع الصور
+function handleImageUpload(index, event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById(`preview${index}`);
+            preview.src = e.target.result;
+            preview.classList.add('show');
+            slides[index].image = e.target.result;
+            // حفظ مباشر بعد رفع الصورة
+            localStorage.setItem('sliderData', JSON.stringify(slides));
+        };
+        reader.readAsDataURL(file);
     }
 }
 
@@ -163,7 +182,7 @@ function renderSlides() {
     });
 }
 
-// لوحة التعديل
+// عرض لوحة التحرير
 function renderEditPanel() {
     const editorsDiv = document.getElementById('slideEditors');
     editorsDiv.innerHTML = '';
@@ -195,47 +214,37 @@ function renderEditPanel() {
     });
 }
 
-// معالجة رفع الصور
-function handleImageUpload(index, event) {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById(`preview${index}`);
-            preview.src = e.target.result;
-            preview.classList.add('show');
-            slides[index].image = e.target.result;
-        };
-        reader.readAsDataURL(file);
+// التنقل بين الصفحات
+function showPage(pageName) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+
+    document.getElementById(pageName + 'Page').classList.add('active');
+    document.querySelector(`[onclick="showPage('${pageName}')"]`).classList.add('active');
+
+    currentPage = pageName;
+
+    if (pageName === 'slider') {
+        renderSlides();
+    } else if (pageName === 'edit') {
+        renderEditPanel();
     }
-}
-
-// حفظ التغييرات
-function saveChanges() {
-    slides = slides.map((slide, index) => ({
-        title: document.getElementById(`title${index}`).value,
-        text: document.getElementById(`text${index}`).value,
-        image: document.getElementById(`preview${index}`).src || '',
-        bg: slide.bg
-    }));
-
-    localStorage.setItem('customSlider', JSON.stringify(slides));
-    
-    const msg = document.getElementById('successMessage');
-    msg.classList.add('show');
-    setTimeout(() => msg.classList.remove('show'), 3000);
-    
-    renderSlides();
 }
 
 // إضافة سلايد جديد
 function addNewSlide() {
     slides.push({
         title: "سلايد جديد",
-        text: "وصف السلايد",
+        text: "أضف وصفاً هنا",
         image: "",
         bg: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)"
     });
+    localStorage.setItem('sliderData', JSON.stringify(slides));
     renderEditPanel();
 }
 
@@ -246,6 +255,7 @@ function deleteSlide(index) {
         if (currentSlide >= slides.length) {
             currentSlide = slides.length - 1;
         }
+        localStorage.setItem('sliderData', JSON.stringify(slides));
         renderEditPanel();
         renderSlides();
     }
@@ -274,8 +284,7 @@ setInterval(() => {
     }
 }, 5000);
 
-// تهيئة الموقع
+// تهيئة الموقع عند التحميل
 document.addEventListener('DOMContentLoaded', function() {
     loadSlides();
-    renderSlides();
 });
