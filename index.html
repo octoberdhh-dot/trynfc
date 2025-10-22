@@ -3,880 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع سلايدر قابل للتعديل</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        /* Navigation Menu */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 10px;
-            list-style: none;
-        }
-
-        .nav-link {
-            padding: 10px 20px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .nav-link:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .nav-link.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        /* Pages */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Home Page */
-        .hero {
-            background: white;
-            padding: 60px 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .hero h1 {
-            color: #667eea;
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            color: #666;
-            font-size: 20px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 15px 35px;
-            border: none;
-            border-radius: 30px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        .feature-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 24px;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Slider Page */
-        .slider-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom: 30px;
-        }
-
-        .slider {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .slide.active {
-            opacity: 1;
-        }
-
-        .slide-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .slide-content {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 600px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .slide-content h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 32px;
-        }
-
-        .slide-content p {
-            color: #333;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .slider-controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .slider-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
-        }
-
-        .slider-btn:hover {
-            background: #5568d3;
-            transform: scale(1.1);
-        }
-
-        .dots {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ccc;
-            margin: 0 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .dot.active {
-            background: #667eea;
-            transform: scale(1.3);
-        }
-
-        /* Edit Page */
-        .edit-container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .edit-container h2 {
-            color: #667eea;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 32px;
-        }
-
-        .slide-editor {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
-        }
-
-        .slide-editor h4 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .image-upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .image-upload-area:hover {
-            background: #f0f4ff;
-            border-color: #5568d3;
-        }
-
-        .image-upload-area p {
-            color: #667eea;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .image-upload-area input[type="file"] {
-            display: none;
-        }
-
-        .image-preview {
-            margin-top: 15px;
-            max-width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .image-preview.show {
-            display: block;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .remove-image-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: none;
-            transition: all 0.3s;
-        }
-
-        .remove-image-btn.show {
-            display: inline-block;
-        }
-
-        .remove-image-btn:hover {
-            background: #c82333;
-        }
-
-        .delete-slide-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .delete-slide-btn:hover {
-            background: #c82333;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .add-slide-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
-        }
-
-        .add-slide-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-
-        .save-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
-        }
-
-        .save-btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-            text-align: center;
-            font-weight: 600;
-            border: 2px solid #c3e6cb;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: slideDown 0.3s;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .data-info {
-            background: #e7f3ff;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border-right: 5px solid #667eea;
-        }
-
-        .data-info h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .data-info p {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .slider {
-                height: 350px;
-            }
-        }
-    </style>
+    <title>قصة حبنا</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation Menu -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                🎨 موقع السلايدر
+    <div class="min-h-screen bg-gradient">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hearts-container" id="heartsContainer"></div>
+            <div class="hero-content">
+                <h1 id="coupleNames"></h1>
+                <p id="storyTitle"></p>
+                <div class="duration-box">
+                    <p>معاً منذ <span id="duration"></span> شهر</p>
+                </div>
             </div>
-            <ul class="nav-menu">
-                <li><a class="nav-link active" onclick="showPage('home')">🏠 الرئيسية</a></li>
-                <li><a class="nav-link" onclick="showPage('slider')">🎬 السلايدر</a></li>
-                <li><a class="nav-link" onclick="showPage('edit')">✏ التعديل</a></li>
-            </ul>
-        </div>
-    </nav>
+            <div class="scroll-indicator">↓</div>
+        </section>
 
-    <div class="container">
-        <!-- Home Page -->
-        <div id="homePage" class="page active">
-            <div class="hero">
-                <h1>مرحباً بك في موقع السلايدر الاحترافي</h1>
-                <p>موقع متكامل يمكنك من إنشاء وتعديل سلايدر احترافي مع إمكانية رفع الصور وحفظ جميع التعديلات</p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="showPage('slider')">🎬 شاهد السلايدر</button>
-                    <button class="btn btn-secondary" onclick="showPage('edit')">✏ ابدأ التعديل</button>
+        <!-- Our Story Section -->
+        <section class="story-section">
+            <div class="container">
+                <h2>قصتنا 💕</h2>
+                <div class="story-box">
+                    <div id="storyText"></div>
                 </div>
             </div>
+        </section>
 
-            <div class="features">
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>تصميم احترافي</h3>
-                    <p>تصميم عصري ومتجاوب مع جميع الشاشات والأجهزة</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📸</div>
-                    <h3>رفع الصور</h3>
-                    <p>ارفع صورك الخاصة من جهازك واستخدمها في السلايدر</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💾</div>
-                    <h3>حفظ تلقائي</h3>
-                    <p>جميع التعديلات تُحفظ تلقائياً ولن تضيع أبداً</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>سهل الاستخدام</h3>
-                    <p>واجهة بسيطة وسهلة للتعديل والتحكم الكامل</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>تبديل تلقائي</h3>
-                    <p>السلايدر يتحرك تلقائياً كل 5 ثواني</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">➕</div>
-                    <h3>إضافة غير محدودة</h3>
-                    <p>أضف عدد لا محدود من السلايدات والصور</p>
-                </div>
+        <!-- Timeline Section -->
+        <section class="timeline-section">
+            <div class="container">
+                <h2>لحظات مميزة ✨</h2>
+                <div id="timelineContainer" class="timeline-container"></div>
             </div>
+        </section>
 
-            <div class="data-info">
-                <h3>💡 معلومة مهمة عن حفظ البيانات</h3>
-                <p><strong>✅ البيانات محفوظة بشكل دائم:</strong> جميع التعديلات والصور التي تضيفها يتم حفظها في المتصفح باستخدام localStorage. حتى لو أغلقت الموقع أو عملت Refresh، البيانات لن تضيع!</p>
-                <p><strong>🔒 البيانات خاصة بجهازك:</strong> البيانات محفوظة على جهازك فقط ولن يراها أي شخص آخر.</p>
-                <p><strong>🗑 لحذف البيانات:</strong> إذا أردت حذف جميع البيانات والبدء من جديد، يمكنك مسح بيانات الموقع من إعدادات المتصفح.</p>
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <div class="container">
+                <h2>ذكرياتنا 📸</h2>
+                <div id="galleryGrid" class="gallery-grid"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- Slider Page -->
-        <div id="sliderPage" class="page">
-            <div class="slider-container">
-                <h2 style="color: #667eea; text-align: center; margin-bottom: 20px;">🎬 السلايدر التفاعلي</h2>
-                <div class="slider" id="slider"></div>
-                <div class="slider-controls">
-                    <button class="slider-btn" onclick="prevSlide()">❮ السابق</button>
-                    <button class="slider-btn" onclick="nextSlide()">التالي ❯</button>
+        <!-- Favorites Section -->
+        <section class="favorites-section">
+            <div class="container">
+                <h2>أشياء نحبها 💝</h2>
+                <div class="favorites-grid">
+                    <div class="favorite-item">
+                        <span>🎵</span>
+                        <h3>أغنيتنا المفضلة</h3>
+                        <p id="favoriteSong"></p>
+                    </div>
+                    <div class="favorite-item">
+                        <span>📍</span>
+                        <h3>مكان لقائنا الأول</h3>
+                        <p id="meetingPlace"></p>
+                    </div>
+                    <div class="favorite-item">
+                        <span>🍕</span>
+                        <h3>أكلتنا المفضلة</h3>
+                        <p id="favoriteFood"></p>
+                    </div>
+                    <div class="favorite-item">
+                        <span>🎬</span>
+                        <h3>فيلمنا المفضل</h3>
+                        <p id="favoriteMovie"></p>
+                    </div>
                 </div>
-                <div class="dots" id="dots"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- Edit Page -->
-        <div id="editPage" class="page">
-            <div class="edit-container">
-                <h2>✏ تعديل محتوى السلايدات</h2>
-                <div id="slideEditors"></div>
-                <div class="action-buttons">
-                    <button class="save-btn" onclick="saveChanges()">💾 حفظ جميع التغييرات</button>
-                    <button class="add-slide-btn" onclick="addNewSlide()">➕ إضافة سلايد جديد</button>
-                </div>
-                <div class="success-message" id="successMessage">
-                    ✅ تم حفظ جميع التغييرات بنجاح! البيانات محفوظة ولن تضيع.
+        <!-- Forever Section -->
+        <section class="forever-section">
+            <div class="container">
+                <div class="forever-box">
+                    <div class="ring-emoji">💍</div>
+                    <h2 id="futureMessage"></h2>
+                    <p>معاً للأبد ❤️</p>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <footer>
+            <p>Made with ❤️ by ZOSER</p>
+            <p class="footer-small">Create your own love story card at zoser.shop</p>
+        </footer>
     </div>
-
-    <script>
-        let slides = [
-            {
-                title: "مرحباً بك في موقعنا",
-                text: "هذا موقع تفاعلي مع سلايدر قابل للتعديل والحفظ",
-                image: "",
-                bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-            },
-            {
-                title: "سهل التعديل",
-                text: "يمكنك تعديل أي محتوى وإضافة صور من جهازك بكل سهولة",
-                image: "",
-                bg: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-            },
-            {
-                title: "احفظ تغييراتك",
-                text: "جميع التعديلات والصور يتم حفظها تلقائياً ولن تضيع أبداً",
-                image: "",
-                bg: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
-            }
-        ];
-
-        let currentSlide = 0;
-        let currentPage = 'home';
-
-        // تحميل السلايدات من التخزين المحلي
-        function loadSlides() {
-            const saved = localStorage.getItem('slides');
-            if (saved) {
-                slides = JSON.parse(saved);
-                console.log('✅ تم تحميل البيانات المحفوظة');
-            }
-        }
-
-        // عرض صفحة محددة
-        function showPage(pageName) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-
-            document.getElementById(pageName + 'Page').classList.add('active');
-            document.querySelector(`[onclick="showPage('${pageName}')"]`).classList.add('active');
-
-            currentPage = pageName;
-
-            if (pageName === 'slider') {
-                renderSlides();
-            } else if (pageName === 'edit') {
-                renderEditPanel();
-            }
-        }
-
-        // عرض السلايدات
-        function renderSlides() {
-            const slider = document.getElementById('slider');
-            const dots = document.getElementById('dots');
-            
-            slider.innerHTML = '';
-            dots.innerHTML = '';
-
-            slides.forEach((slide, index) => {
-                const slideDiv = document.createElement('div');
-                slideDiv.className = `slide ${index === currentSlide ? 'active' : ''}`;
-                
-                if (slide.image) {
-                    slideDiv.style.backgroundImage = `url(${slide.image})`;
-                } else {
-                    slideDiv.style.background = slide.bg;
-                }
-                
-                slideDiv.innerHTML = `
-                    ${slide.image ? '<div class="slide-overlay"></div>' : ''}
-                    <div class="slide-content">
-                        <h2>${slide.title}</h2>
-                        <p>${slide.text}</p>
-                    </div>
-                `;
-                slider.appendChild(slideDiv);
-
-                const dot = document.createElement('span');
-                dot.className = `dot ${index === currentSlide ? 'active' : ''}`;
-                dot.onclick = () => goToSlide(index);
-                dots.appendChild(dot);
-            });
-        }
-
-        // معالجة رفع الصور
-        function handleImageUpload(index, event) {
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById(`preview${index}`);
-                    const removeBtn = document.getElementById(`removeBtn${index}`);
-                    preview.src = e.target.result;
-                    preview.classList.add('show');
-                    removeBtn.classList.add('show');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // إزالة الصورة
-        function removeImage(index) {
-            const preview = document.getElementById(`preview${index}`);
-            const removeBtn = document.getElementById(`removeBtn${index}`);
-            const input = document.getElementById(`imageInput${index}`);
-            
-            preview.src = '';
-            preview.classList.remove('show');
-            removeBtn.classList.remove('show');
-            input.value = '';
-        }
-
-        // عرض لوحة التحرير
-        function renderEditPanel() {
-            const editorsDiv = document.getElementById('slideEditors');
-            editorsDiv.innerHTML = '';
-
-            slides.forEach((slide, index) => {
-                const editor = document.createElement('div');
-                editor.className = 'slide-editor';
-                editor.innerHTML = `
-                    <h4>📄 السلايد رقم ${index + 1}</h4>
-                    <div class="form-group">
-                        <label>📝 العنوان:</label>
-                        <input type="text" id="title${index}" value="${slide.title}" placeholder="اكتب العنوان هنا">
-                    </div>
-                    <div class="form-group">
-                        <label>📄 النص:</label>
-                        <textarea id="text${index}" placeholder="اكتب النص هنا">${slide.text}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>📸 صورة الخلفية (اختياري):</label>
-                        <div class="image-upload-area" onclick="document.getElementById('imageInput${index}').click()">
-                            <p>📁 اضغط هنا لرفع صورة من جهازك</p>
-                            <input type="file" id="imageInput${index}" accept="image/*" onchange="handleImageUpload(${index}, event)">
-                        </div>
-                        <img id="preview${index}" class="image-preview ${slide.image ? 'show' : ''}" src="${slide.image || ''}">
-                        <div class="btn-group">
-                            <button id="removeBtn${index}" class="remove-image-btn ${slide.image ? 'show' : ''}" onclick="removeImage(${index})">❌ إزالة الصورة</button>
-                            ${slides.length > 1 ? `<button class="delete-slide-btn" onclick="deleteSlide(${index})">🗑 حذف السلايد</button>` : ''}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>🎨 لون الخلفية (إذا لم ترفع صورة):</label>
-                        <input type="text" id="bg${index}" value="${slide.bg}" placeholder="مثال: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
-                    </div>
-                `;
-                editorsDiv.appendChild(editor);
-            });
-        }
-
-        // تحديث وحفظ التغييرات
-        function saveChanges() {
-            slides = slides.map((slide, index) => ({
-                title: document.getElementById(`title${index}`).value,
-                text: document.getElementById(`text${index}`).value,
-                image: document.getElementById(`preview${index}`).src || '',
-                bg: document.getElementById(`bg${index}`).value
-            }));
-
-            localStorage.setItem('slides', JSON.stringify(slides));
-            
-            const msg = document.getElementById('successMessage');
-            msg.classList.add('show');
-            setTimeout(() => msg.classList.remove('show'), 4000);
-            
-            renderSlides();
-        }
-
-        // دوال التنقل
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            renderSlides();
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            renderSlides();
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            renderSlides();
-        }
-
-        // إضافة سلايد جديد
-        function addNewSlide() {
-            slides.push({
-                title: "سلايد جديد",
-                text: "أضف النص هنا",
-                image: "",
-                bg: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)"
-            });
-            renderEditPanel();
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
-
-        // حذف سلايد
-        function deleteSlide(index) {
-            if (slides.length > 1 && confirm('هل أنت متأكد من حذف هذا السلايد؟')) {
-                slides.splice(index, 1);
-                if (currentSlide >= slides.length) {
-                    currentSlide = slides.length - 1;
-                }
-                renderEditPanel();
-                renderSlides();
-            }
-        }
-
-        // التبديل التلقائي كل 5 ثواني
-        setInterval(() => {
-            if (currentPage === 'slider') {
-                nextSlide();
-            }
-        }, 5000);
-
-        // تهيئة الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSlides();
-            renderSlides();
-        });
-    </script>
+    <script src="data.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
