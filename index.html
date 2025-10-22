@@ -3,96 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قصة حبنا</title>
-    <link rel="stylesheet" href="style.css">
+    <title>معرض الصور</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+
+        .nav {
+            background: #333;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .nav-link.active {
+            background: #555;
+        }
+
+        .page {
+            display: none;
+            padding: 2rem;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* سلايدر */
+        .slider-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        .slide-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .slide-controls button {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .dots {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #333;
+        }
+
+        /* صفحة التعديل */
+        .edit-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .slide-editor {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .image-upload-area {
+            border: 2px dashed #ddd;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .btn-group {
+            margin-top: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .add-slide-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        #successMessage {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        #successMessage.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="min-h-screen bg-gradient">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hearts-container" id="heartsContainer"></div>
-            <div class="hero-content">
-                <h1 id="coupleNames"></h1>
-                <p id="storyTitle"></p>
-                <div class="duration-box">
-                    <p>معاً منذ <span id="duration"></span> شهر</p>
-                </div>
-            </div>
-            <div class="scroll-indicator">↓</div>
-        </section>
+    <nav class="nav">
+        <a href="#" class="nav-link active" onclick="showPage('slider')">عرض السلايدر</a>
+        <a href="#" class="nav-link" onclick="showPage('edit')">تعديل السلايدر</a>
+    </nav>
 
-        <!-- Our Story Section -->
-        <section class="story-section">
-            <div class="container">
-                <h2>قصتنا 💕</h2>
-                <div class="story-box">
-                    <div id="storyText"></div>
-                </div>
+    <div id="sliderPage" class="page active">
+        <div class="slider-container">
+            <div id="slider"></div>
+            <div class="slide-controls">
+                <button onclick="prevSlide()">◀</button>
+                <button onclick="nextSlide()">▶</button>
             </div>
-        </section>
-
-        <!-- Timeline Section -->
-        <section class="timeline-section">
-            <div class="container">
-                <h2>لحظات مميزة ✨</h2>
-                <div id="timelineContainer" class="timeline-container"></div>
-            </div>
-        </section>
-
-        <!-- Gallery Section -->
-        <section class="gallery-section">
-            <div class="container">
-                <h2>ذكرياتنا 📸</h2>
-                <div id="galleryGrid" class="gallery-grid"></div>
-            </div>
-        </section>
-
-        <!-- Favorites Section -->
-        <section class="favorites-section">
-            <div class="container">
-                <h2>أشياء نحبها 💝</h2>
-                <div class="favorites-grid">
-                    <div class="favorite-item">
-                        <span>🎵</span>
-                        <h3>أغنيتنا المفضلة</h3>
-                        <p id="favoriteSong"></p>
-                    </div>
-                    <div class="favorite-item">
-                        <span>📍</span>
-                        <h3>مكان لقائنا الأول</h3>
-                        <p id="meetingPlace"></p>
-                    </div>
-                    <div class="favorite-item">
-                        <span>🍕</span>
-                        <h3>أكلتنا المفضلة</h3>
-                        <p id="favoriteFood"></p>
-                    </div>
-                    <div class="favorite-item">
-                        <span>🎬</span>
-                        <h3>فيلمنا المفضل</h3>
-                        <p id="favoriteMovie"></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Forever Section -->
-        <section class="forever-section">
-            <div class="container">
-                <div class="forever-box">
-                    <div class="ring-emoji">💍</div>
-                    <h2 id="futureMessage"></h2>
-                    <p>معاً للأبد ❤️</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <p>Made with ❤️ by ZOSER</p>
-            <p class="footer-small">Create your own love story card at zoser.shop</p>
-        </footer>
+            <div id="dots" class="dots"></div>
+        </div>
     </div>
-    <script src="data.js"></script>
+
+    <div id="editPage" class="page">
+        <div class="edit-container">
+            <div id="successMessage">✅ تم حفظ التغييرات بنجاح!</div>
+            <div id="slideEditors"></div>
+            <button class="add-slide-btn" onclick="addNewSlide()">+ إضافة سلايد جديد</button>
+            <button class="save-btn" onclick="saveChanges()">💾 حفظ التغييرات</button>
+        </div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>
